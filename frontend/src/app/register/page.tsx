@@ -1,11 +1,28 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import * as v from "valibot";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form";
+import useLoginForm from "~/features/auth/hooks/useLoginForm";
+import useRegisterForm from "~/features/auth/hooks/useRegisterForm";
+import { RegisterSchemaInputs } from "~/features/auth/validation/registerSchema";
 
 export default function Register() {
+  const { form, onSubmit } = useRegisterForm();
+
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
@@ -17,37 +34,69 @@ export default function Register() {
             </p>
           </div>
 
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="exemple@gmail.com"
-                required
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel>Nom</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
 
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Mot de passe</Label>
-              </div>
-              <Input id="password" type="password" required />
-            </div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="confirm-password">
-                  Confirmer le mot de passe
-                </Label>
-              </div>
-              <Input id="confirm-password" type="password" required />
-            </div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel>Mot de passe</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Button type="submit" className="w-full">
-              S'inscrire
-            </Button>
-          </div>
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel>Confirmer le mot de passe</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" className="w-full">
+                S'inscrire
+              </Button>
+            </form>
+          </Form>
 
           <div className="mt-4 text-center text-sm">
             Vous avez déjà un compte ?{" "}
