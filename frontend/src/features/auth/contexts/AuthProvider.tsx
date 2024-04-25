@@ -21,7 +21,10 @@ export interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<{ email: string; name: string } | null>(null);
+  const [user, setUser] = useState<{ email: string; name: string } | null>({
+    email: "jar",
+    name: "jarname",
+  });
   const [token, setToken] = useLocalStorage<string | null>("auth-token", null);
 
   function logout() {

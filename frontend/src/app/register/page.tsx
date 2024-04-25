@@ -4,10 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { valibotResolver } from "@hookform/resolvers/valibot";
-import * as v from "valibot";
 import {
   Form,
   FormControl,
@@ -16,12 +12,12 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import useLoginForm from "~/features/auth/hooks/useLoginForm";
 import useRegisterForm from "~/features/auth/hooks/useRegisterForm";
-import { RegisterSchemaInputs } from "~/features/auth/validation/registerSchema";
+import { useAuth } from "~/features/auth/contexts/AuthProvider";
 
 export default function Register() {
   const { form, onSubmit } = useRegisterForm();
+  const a = useAuth();
 
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
@@ -33,6 +29,8 @@ export default function Register() {
               Entrez votre email pour vous inscrire, ou connectez-vous
             </p>
           </div>
+
+          <pre>{JSON.stringify(a, null, 2)}</pre>
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">

@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "~/layouts/Navbar";
 import { cn } from "~/lib/utils";
 import ReactQueryProvider from "~/components/ReactQueryProvider";
+import AuthProvider from "~/features/auth/contexts/AuthProvider";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -21,8 +22,10 @@ export default function RootLayout({
     <html lang="en" className="min-h-full">
       <body className={cn(dmSans.className, "min-h-full pb-24")}>
         <ReactQueryProvider>
-          <Navbar />
-          {children}
+          <AuthProvider>
+            <Navbar />
+            {children}
+          </AuthProvider>
         </ReactQueryProvider>
       </body>
     </html>
