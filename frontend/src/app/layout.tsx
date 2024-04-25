@@ -3,6 +3,7 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "~/layouts/Navbar";
 import { cn } from "~/lib/utils";
+import ReactQueryProvider from "~/components/ReactQueryProvider";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -19,8 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="min-h-full">
       <body className={cn(dmSans.className, "min-h-full pb-24")}>
-        <Navbar />
-        {children}
+        <ReactQueryProvider>
+          <Navbar />
+          {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );

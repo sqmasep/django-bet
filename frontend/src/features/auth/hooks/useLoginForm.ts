@@ -8,7 +8,25 @@ export default function useLoginForm() {
   });
 
   const onSubmit: SubmitHandler<LoginSchemaInputs> = data => {
-    console.log("submit");
+    console.log(data);
+
+    fetch("http://localhost:8000/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Une erreur s'est produite");
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   return {
