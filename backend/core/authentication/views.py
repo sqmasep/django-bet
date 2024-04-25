@@ -13,26 +13,35 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-class Loginview(APIView):
+    
+
+class LoginView(APIView):
     def post(self, request):
         email = request.data["email"]
         password = request.data["password"]
         
         try:
-            user = User.objects.get(email = email)
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
-            raise AuthenticationFailed("Account does  not exist")
-        if user is None:
-            raise AuthenticationFailed("User does not exist")
+            raise AuthenticationFailed("Account does not exist")
+        
         if not user.check_password(password):
             raise AuthenticationFailed("Incorrect Password")
+        
+       
         access_token = AccessToken.for_user(user)
-        refresh_token =RefreshToken.for_user(user)
+        refresh_token = RefreshToken.for_user(user)
+   
+        access_token_str = str(access_token)
+        refresh_token_str = str(refresh_token)
+        
+       
         return Response({
-            "access_token" : access_token,
-            "refresh_token" : refresh_token
+            "access_token": access_token_str,
+            "refresh_token": refresh_token_str
         })
     
+
 class LogoutView(APIView):
     def post(self, request):
         try:
