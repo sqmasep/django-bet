@@ -1,0 +1,16 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "tailwindCSS.classAttributes": ["class", "className", "ngClass"],
+  "tailwindCSS.experimental.classRegex": [
+    ["cva(([^)]*))", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx(([^)]*))", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+    ["tv(([^)]*))", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ]
+}

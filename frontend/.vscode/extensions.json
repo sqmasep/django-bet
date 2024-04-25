@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    // Essentials
+    "dbaeumer.vscode-eslint", // ESLint
+    "esbenp.prettier-vscode", // Prettier
+    "aaron-bond.better-comments", // Better comments
+    "wayou.vscode-todo-highlight", // Highlight, see section #3
+    "usernamehw.errorlens", // Error Lens: display the errors to the screen directly
+    "eamodio.gitlens", // Git history, blame, ...
+    "yoavbls.pretty-ts-errors", // Better TS errors explanations
+
+    "tailwindlabs.tailwindcss-intellisense", // Show the classes and colors in the autocomplete
+
+    "formulahendry.auto-close-tag", // Close HTML tags automatically
+    "formulahendry.auto-rename-tag", // Rename HTML tags automatically
+    "meganrogge.template-string-converter" // Convert "" to `` when typing ${
+  ]
+}
