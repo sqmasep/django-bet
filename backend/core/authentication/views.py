@@ -1,4 +1,5 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.generics import RetrieveAPIView
 from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -25,3 +26,10 @@ class HelloWorldView(APIView):
 
     def get(self, request):
         return Response(data={"hello":"world"}, status=status.HTTP_200_OK)
+    
+class Me(RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CustomUserSerializer
+
+    def get_object(self):
+        return self.request.user
