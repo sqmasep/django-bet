@@ -31,7 +31,6 @@ class CreateBetView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-
 class SignUpForBetView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
