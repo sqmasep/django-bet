@@ -33,3 +33,19 @@ class Me(RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+    
+
+class AddToBalanceView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CustomUserSerializer
+    
+    def post(request):
+        amount = request.data.get('amount', 0)
+        user = request.user
+        if amount <= 0:
+            return Response({'detail': 'Invalid Amount'},status=status.HTTP_400_BAD_REQUEST)
+        user.balance += amount
+        user.save(update_fields=['balance'])
+        user.refresh_from_db()
+        return Response({'balance': user.balance},status=status.HTTP_200_OK)
+
