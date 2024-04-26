@@ -9,5 +9,9 @@ module.exports = {
   },
 
   plugins: [],
-  rules: {},
+  rules: {
+    "react/function-component-definition": "off",
+    "react/no-unescaped-entities": "off",
+    "no-duplicate-imports": "off",
+  },
 };
