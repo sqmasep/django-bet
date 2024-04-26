@@ -15,8 +15,8 @@ import { Trash } from "lucide-react";
 
 export default function NewBetForm() {
   const [options, setOptions] = useState<{ _id: number; value: string }[]>([
-    { _id: 1, value: "" },
-    { _id: 2, value: "" },
+    { _id: "1", value: "" },
+    { _id: "2", value: "" },
   ]);
   const { form, onSubmit } = useNewBetForm();
 
