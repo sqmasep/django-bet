@@ -30,7 +30,7 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
-import NewBetForm from "./NewBetForm";
+import BetForm from "./BetForm";
 
 interface BetTableProps {
   array: { name: string; odds: number }[] | undefined;
@@ -68,13 +68,13 @@ export const columns: ColumnDef<BetTableProps["array"]>[] = [
     cell: ({ row }) => (
       <div className="flex justify-end">
         <Dialog>
-          <DialogTrigger>
+          <DialogTrigger asChild>
             <Button variant="outline">Parier sur ce joueur</Button>
           </DialogTrigger>
 
           <DialogContent>
             <h2 className="text-2xl font-bold">Parier sur {row.getValue("name")}</h2>
-            <NewBetForm />
+            <BetForm />
           </DialogContent>
         </Dialog>
       </div>
