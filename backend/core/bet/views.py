@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from.serializers import BetSerializer, UserBetSerializer
-from.models import Bet
+from.models import Bet, UserBet
 from rest_framework import generics
 from rest_framework import permissions, status, views
 from rest_framework.response import Response
@@ -54,11 +54,15 @@ class CastBetView(views.APIView):
     def post(self, request, format=None):
         serializer = UserBetSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            # Check if the user is signed up for the bet
             bet_id = serializer.validated_data['bet'].id
+            # Bet que si inscrit
             if not Bet.objects.filter(id=bet_id, users=request.user).exists():
                 return Response({'detail': 'You are not signed up for this bet.'}, status=status.HTTP_400_BAD_REQUEST)
             
+            # Pas 2 fois le même  bet
+            if UserBet.objects.filter(bet_id=bet_id, user=request.user).exists():
+                return Response({'detail': 'You have already placed a bet on this bet.'}, status=status.HTTP_400_BAD_REQUEST)
+
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
