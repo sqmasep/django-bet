@@ -21,7 +21,8 @@ from django.urls import path, include
 urlpatterns = [
     # import urls from bet
     path('admin/', admin.site.urls),
-    path('api/', include('authentication.urls'))
+    path('api/', include('authentication.urls')),
+    path('api/', include('bet.urls')),
     #path('user/', include('authentication.urls')),
     #path('token/', jwt_views.TokenObtainPairView.as_view(), name ="token_obtain_pair"),
     #path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name="token_refresh"),

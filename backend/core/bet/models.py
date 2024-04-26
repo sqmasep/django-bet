@@ -1,10 +1,27 @@
 from django.db import models
+import string
 from authentication.models import CustomUser
+from django.db.models import Sum
+import uuid
+import random
+# import sum module
+
 
 # Create your models here.
+
+def generate_random_code():
+   
+    code = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
+    if Bet.objects.filter(signup_code=code).exists():
+        return generate_random_code()
+    return code
+
+
 class Bet(models.Model):
     name = models.CharField(max_length=100)
     author = models.ForeignKey(CustomUser, related_name='author', null=True, on_delete=models.CASCADE)
+    users = models.ManyToManyField(CustomUser, related_name='users', blank=True)
+    signup_code = models.CharField(max_length=5, default=generate_random_code, editable=False, unique=True)
     
     def __str__(self):
         return self.name
@@ -22,6 +39,8 @@ class Bet(models.Model):
     def get_winning_option(self):
         return self.options.first()
 
+
+
 class Option(models.Model):
     text = models.CharField(max_length=100)
     bet = models.ForeignKey(Bet, related_name='options', on_delete=models.CASCADE)
@@ -32,6 +51,7 @@ class Option(models.Model):
         self.total_amount = self.user_bets.aggregate(total=Sum('amount'))['total'] or 0
         self.number_of_bets = self.user_bets.count()
         self.save()
+
 
 class UserBet(models.Model):
     user = models.ForeignKey(CustomUser, related_name='user_bets', on_delete=models.CASCADE)
