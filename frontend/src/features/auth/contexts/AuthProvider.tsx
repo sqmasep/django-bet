@@ -1,16 +1,17 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 import useLocalStorage from "~/hooks/useLocalStorage";
+import type { UserSchemaOutput } from "../validation/userSchema";
+import userSchema from "../validation/userSchema";
+import * as v from "valibot";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-interface UserData {
-  email: string;
-  name: string;
-}
+type UserData = UserSchemaOutput;
 
 export interface AuthContextType {
-  user: UserData | null;
-  setUser: React.Dispatch<React.SetStateAction<AuthContextType["user"]>>;
+  user: UserData | null | undefined;
+  invalidateUser: () => Promise<void> | void;
 
   token: string | null;
   setToken: (token: string | null) => void;
@@ -20,18 +21,38 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  setUser: () => {},
+  invalidateUser: () => {},
   token: null,
   setToken: () => {},
   logout: () => {},
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<{ email: string; name: string } | null>({
-    email: "jar",
-    name: "jarname",
-  });
   const [token, setToken] = useLocalStorage<string | null>("auth-token", null);
+  const queryClient = useQueryClient();
+
+  const { data: user } = useQuery({
+    queryKey: ["user", "me"],
+    enabled: token !== null,
+    queryFn: async () => {
+      const response = await fetch("http://localhost:8000/api/user/me/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error(`${response.status} - ${response.statusText}`);
+
+      const data = v.parse(userSchema, await response.json());
+      return data;
+    },
+  });
+
+  async function invalidateUser() {
+    return queryClient.invalidateQueries({
+      queryKey: ["user", "me"],
+    });
+  }
 
   function logout() {
     setToken(null);
@@ -41,7 +62,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     <AuthContext.Provider
       value={{
         user,
-        setUser,
+        invalidateUser,
         token,
         setToken,
         logout,

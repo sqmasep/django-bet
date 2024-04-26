@@ -10,4 +10,4 @@ const registerSchema = v.object({
 
 export default registerSchema;
 
-export type RegisterSchemaInputs = v.Input<typeof registerSchema>;
+export type RegisterSchemaInput = v.Input<typeof registerSchema>;

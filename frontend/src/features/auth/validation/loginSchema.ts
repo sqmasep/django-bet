@@ -8,4 +8,4 @@ const loginSchema = v.object({
 
 export default loginSchema;
 
-export type LoginSchemaInputs = v.Input<typeof loginSchema>;
+export type LoginSchemaInput = v.Input<typeof loginSchema>;
