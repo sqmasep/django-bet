@@ -1,8 +1,8 @@
 import * as v from "valibot";
-import { emailSchema, passwordSchema } from "./common";
+import { passwordSchema, usernameSchema } from "./common";
 
 const loginSchema = v.object({
-  email: emailSchema,
+  username: usernameSchema,
   password: passwordSchema,
 });
 

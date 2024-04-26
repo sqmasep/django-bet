@@ -81,7 +81,7 @@ export default function Register() {
                   <FormItem className="grid gap-2">
                     <FormLabel>Confirmer le mot de passe</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

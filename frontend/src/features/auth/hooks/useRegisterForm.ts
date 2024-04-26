@@ -1,5 +1,7 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import registerSchema, { RegisterSchemaInputs } from "../validation/registerSchema";
+import type { SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import type { RegisterSchemaInputs } from "../validation/registerSchema";
+import registerSchema from "../validation/registerSchema";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useAuth } from "../contexts/AuthProvider";
 
@@ -11,14 +13,14 @@ export default function useRegisterForm() {
   });
 
   const onSubmit: SubmitHandler<RegisterSchemaInputs> = data => {
-    fetch("http://localhost:8000/user/register", {
+    fetch("http://localhost:8000/user/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
-      .then(response => {
+      .then(async response => {
         if (!response.ok) throw new Error("Une erreur s'est produite");
         return response.json();
       })
