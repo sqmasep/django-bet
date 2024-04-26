@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from .serializers import MyTokenObtainPairSerializer, CustomUserSerializer
 
 class ObtainTokenPairWithColorView(TokenObtainPairView):
+    # get the user associated with the token
     permission_classes = (permissions.AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
 
