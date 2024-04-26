@@ -13,5 +13,7 @@ module.exports = {
     "react/function-component-definition": "off",
     "react/no-unescaped-entities": "off",
     "no-duplicate-imports": "off",
+    "new-cap": "off",
+    camelcase: "off",
   },
 };

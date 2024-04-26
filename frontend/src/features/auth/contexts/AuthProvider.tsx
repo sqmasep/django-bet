@@ -16,7 +16,7 @@ export interface AuthContextType {
   token: string | null;
   setToken: (token: string | null) => void;
 
-  logout: () => void;
+  logout: () => Promise<void> | void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -28,7 +28,7 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useLocalStorage<string | null>("auth-token", null);
+  const [token, setToken] = useLocalStorage<string | null>("django-bet-auth-token", null);
   const queryClient = useQueryClient();
 
   const { data: user } = useQuery({
@@ -54,8 +54,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     });
   }
 
-  function logout() {
+  async function logout() {
     setToken(null);
+    await invalidateUser();
   }
 
   return (

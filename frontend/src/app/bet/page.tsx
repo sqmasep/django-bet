@@ -1,7 +1,10 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { Button } from "~/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
 import BetTable from "~/features/bet/components/BetTable";
+import NewBetForm from "~/features/bet/components/NewBetForm";
 
 export default function Bet() {
   const { data, isLoading, isError } = useQuery({
@@ -29,6 +32,15 @@ export default function Bet() {
 
   return (
     <section className="container mt-12">
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="my-12">Créer un nouveau pari</Button>
+        </DialogTrigger>
+
+        <DialogContent>
+          <NewBetForm />
+        </DialogContent>
+      </Dialog>
       <BetTable array={data} isLoading={isLoading} />
     </section>
   );
