@@ -1,54 +1,26 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from .serializers import UserSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import status, permissions
 from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed
-from .models import User
-from rest_framework_simplejwt.tokens import AccessToken, RefreshToken, TokenError
-from rest_framework import status
+from rest_framework.views import APIView
+from .serializers import MyTokenObtainPairSerializer, CustomUserSerializer
 
-class RegisterView(APIView):
-    def post(self, request):
-        serializer = UserSerializer(data = request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+class ObtainTokenPairWithColorView(TokenObtainPairView):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = MyTokenObtainPairSerializer
+
+class CustomUserCreate(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format='json'):
+        serializer = CustomUserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            if user:
+                json = serializer.data
+                return Response(json, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+class HelloWorldView(APIView):
 
-class LoginView(APIView):
-    def post(self, request):
-        email = request.data["email"]
-        password = request.data["password"]
-        
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            raise AuthenticationFailed("Account does not exist")
-        
-        if not user.check_password(password):
-            raise AuthenticationFailed("Incorrect Password")
-        
-       
-        access_token = AccessToken.for_user(user)
-        refresh_token = RefreshToken.for_user(user)
-   
-        access_token_str = str(access_token)
-        refresh_token_str = str(refresh_token)
-        
-       
-        return Response({
-            "access_token": access_token_str,
-            "refresh_token": refresh_token_str
-        })
-    
-
-class LogoutView(APIView):
-    def post(self, request):
-        try:
-            refresh_token = request.data['refresh_token']
-            if refresh_token:
-                token = RefreshToken(refresh_token)
-                token.blacklist()
-            return Response("Logout Successful", status=status.HTTP_200_OK)
-        except TokenError:
-            raise AuthenticationFailed("Invalid Token")
+    def get(self, request):
+        return Response(data={"hello":"world"}, status=status.HTTP_200_OK)
