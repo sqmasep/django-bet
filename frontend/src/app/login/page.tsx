@@ -25,22 +25,18 @@ export default function Login() {
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Connexion</h1>
             <p className="text-balance text-muted-foreground">
-              Entrez votre email pour vous connecter à votre compte, ou
-              inscrivez-vous
+              Entrez votre email pour vous connecter à votre compte, ou inscrivez-vous
             </p>
           </div>
           <div className="grid gap-4">
             <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="grid gap-4"
-              >
+              <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="username"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Nom d'utilisateur</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -56,7 +52,7 @@ export default function Login() {
                     <FormItem className="grid gap-2">
                       <FormLabel>Mot de passe</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input type="password" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
