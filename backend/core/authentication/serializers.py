@@ -5,11 +5,26 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     @classmethod
     def get_token(cls, user):
-        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+        token = super().get_token(user)
 
         # Add custom claims
-        token['fav_color'] = user.fav_color
+        # ...
+
         return token
+
+    def validate(self, attrs):
+        # The default result (access/refresh tokens)
+        data = super().validate(attrs)
+        
+        # Custom data you want to include
+        data.update({'user': {
+            'id': self.user.id,
+            'username': self.user.username,
+            'email': self.user.email,
+            # Include any other fields from the user model
+        }})
+        return data
+
     
 class CustomUserSerializer(serializers.ModelSerializer):
     """
