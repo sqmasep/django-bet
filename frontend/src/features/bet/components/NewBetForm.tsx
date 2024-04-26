@@ -100,10 +100,6 @@ export default function NewBetForm() {
                         </div>
                       </FormControl>
 
-                      {i === options.length - 1 && (
-                        <pre>{JSON.stringify(field.value.map(o => o.value))}</pre>
-                      )}
-
                       {/* // TODO this says "undefined" if you submit while having at least 1 option */}
                       {i === options.length - 1 && !!options.filter(Boolean).length < 2 && (
                         <FormMessage />

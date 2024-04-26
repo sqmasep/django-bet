@@ -40,7 +40,6 @@ export default function useLoginForm() {
         return json;
       })
       .then(data => {
-        // console.log("login", data);
         auth.setToken(data.access);
         router.push("/bet");
       })
