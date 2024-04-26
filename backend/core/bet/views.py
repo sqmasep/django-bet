@@ -66,3 +66,16 @@ class CastBetView(views.APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class GetBetView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, signup_code):  # Add signup_code as an argument
+        try:
+            bet = Bet.objects.get(signup_code=signup_code)
+        except Bet.DoesNotExist:
+            return Response({'detail': 'Bet not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = BetSerializer(bet)
+        return Response(serializer.data, status=status.HTTP_200_OK)
