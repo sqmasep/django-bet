@@ -1,8 +1,11 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import loginSchema, { LoginSchemaInputs } from "../validation/loginSchema";
 import { valibotResolver } from "@hookform/resolvers/valibot";
+import { useAuth } from "../contexts/AuthProvider";
 
 export default function useLoginForm() {
+  const auth = useAuth();
+
   const form = useForm<LoginSchemaInputs>({
     resolver: valibotResolver(loginSchema),
   });
@@ -18,11 +21,12 @@ export default function useLoginForm() {
       body: JSON.stringify(data),
     })
       .then(response => {
-        if (!response.ok) throw new Error("Une erreur s'est produite");
+        if (!response.ok) throw new Error(`${response.status} - ${response.statusText}`);
         return response.json();
       })
       .then(data => {
-        console.log(data);
+        console.log("login", data);
+        // auth?.setToken(data.token);
       })
       .catch(error => {
         console.error(error);
