@@ -30,8 +30,6 @@ export default function Register() {
             </p>
           </div>
 
-          <pre>{JSON.stringify(a, null, 2)}</pre>
-
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
               <FormField
@@ -69,7 +67,7 @@ export default function Register() {
                   <FormItem className="grid gap-2">
                     <FormLabel>Mot de passe</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

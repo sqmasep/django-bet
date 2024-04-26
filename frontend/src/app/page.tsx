@@ -4,8 +4,8 @@ import { Button } from "~/components/ui/button";
 export default function Home() {
   return (
     <div className="container relative">
-      <div className="flex items-center flex-col gap-2 mt-32">
-        <h1 className="text-7xl tracking-tighter text-center text-balance max-w-[700px] mx-auto font-bold ">
+      <div className="mt-32 flex flex-col items-center gap-2">
+        <h1 className="mx-auto max-w-[700px] text-balance text-center text-7xl font-bold tracking-tighter">
           Pariez avec vos potes sur des trucs fous !
         </h1>
 
@@ -18,8 +18,8 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="relative bg-white rounded-xl border shadow-xl mt-12 p-12 min-h-[600px]">
-        <div className="absolute blur-[200px] -z-50 bg-red-800 rounded-full size-48" />
+      <div className="relative mt-12 min-h-[600px] rounded-xl border bg-white p-12 shadow-xl">
+        <div className="absolute -z-50 size-48 rounded-full bg-red-800 blur-[200px]" />
         aaa
       </div>
     </div>
