@@ -40,19 +40,16 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     queryKey: ["user", "me"],
     enabled: token !== null,
     queryFn: async () => {
-      console.log("trying fetch user data", token);
       const response = await fetch("http://localhost:8000/api/me/", {
         headers: {
           Authorization: `JWT ${token}`,
         },
       });
 
-
       if (!response.ok) throw new Error(`${response.status} - ${response.statusText}`);
 
       const data = v.parse(userSchema, await response.json());
 
-      console.log("auth provider data response", data);
       return data;
     },
   });

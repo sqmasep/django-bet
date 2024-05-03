@@ -44,15 +44,16 @@ export default function Bet() {
   const { mutate: join } = useMutation({
     mutationKey: ["createBet"],
     mutationFn: async (data: { code: string }) =>
-      fetch(`http://localhost:3000/api/bet/signup/${data.code}`, {
+      fetch(`http://localhost:8000/api/bets/signup/${data.code}/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `JWT ${token}`,
+          Authorization: `JWT ${token}`,
         },
         body: JSON.stringify(data),
       }).then<{ signup_code: string }>(async res => res.json()),
     onSuccess: data => {
+      // TODO code is undefined apparently
       const code = data.signup_code;
 
       router.push(`/bet/${code}`);
