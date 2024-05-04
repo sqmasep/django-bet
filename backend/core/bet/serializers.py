@@ -17,9 +17,11 @@ class OptionSerializer(serializers.ModelSerializer):
 
 
 class UserBetSerializer(serializers.ModelSerializer):
+
+    user_username = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = UserBet
-        fields = ['id', 'user', 'bet', 'amount', 'option', 'date_placed']
+        fields = ['id', 'user', 'user_username', 'bet', 'amount', 'option', 'date_placed']
         read_only_fields = ['user', 'date_placed']
 
     def create(self, validated_data):
