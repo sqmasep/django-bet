@@ -1,6 +1,7 @@
 import * as v from "valibot";
 
 const betDetailsSchema = v.object({
+  is_ended: v.boolean(),
   id: v.number(),
   name: v.string(),
   author: v.number(),
@@ -13,6 +14,17 @@ const betDetailsSchema = v.object({
       // users: v.array(v.any()),
       total_amount: v.string(),
       number_of_bets: v.number(),
+    }),
+  ),
+  user_bets: v.array(
+    v.object({
+      id: v.number(),
+      user: v.number(),
+      user_username: v.string(),
+      bet: v.number(),
+      amount: v.string(),
+      option: v.number(),
+      date_placed: v.string(),
     }),
   ),
 });

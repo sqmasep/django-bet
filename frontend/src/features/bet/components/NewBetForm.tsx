@@ -53,13 +53,13 @@ export default function NewBetForm() {
             )}
           />
 
-          <div className="rounded-md border p-2">
-            <span className="mb-2 block text-sm font-bold">Options</span>
+          <div className="rounded-md border py-2">
+            <span className="mb-2 block px-2 text-sm font-bold">Options</span>
             <FormField
               control={form.control}
               name="options"
               render={({ field }) => (
-                <div className="grid gap-2">
+                <div className="grid max-h-48 gap-2 overflow-y-auto p-2">
                   {options.map((option, i) => (
                     <FormItem key={option._id} className="grid gap-1">
                       <FormControl className="relative">
@@ -111,16 +111,18 @@ export default function NewBetForm() {
               )}
             />
 
-            <Button
-              type="button"
-              variant="outline"
-              className="mt-2 w-full"
-              onClick={() => {
-                setOptions(prev => [...prev, { _id: Math.random() * 1000, value: "" }]);
-              }}
-            >
-              Ajouter une option
-            </Button>
+            <div className="mx-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="mt-2 w-full"
+                onClick={() => {
+                  setOptions(prev => [...prev, { _id: Math.random() * 1000, value: "" }]);
+                }}
+              >
+                Ajouter une option
+              </Button>
+            </div>
           </div>
 
           <Button type="submit" className="w-full">

@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Home } from "lucide-react";
+import { Home, User } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { useAuth } from "~/features/auth/contexts/AuthProvider";
+import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
+import NewBetForm from "~/features/bet/components/NewBetForm";
 
 export default function Navbar() {
   const auth = useAuth();
@@ -26,9 +28,28 @@ export default function Navbar() {
           </li>
         </ul>
 
-        <div>
+        <div className="flex items-center gap-4">
           {auth.user ? (
-            <Link href="/profile">{auth.user.username}</Link>
+            <>
+              <Button variant="ghost" asChild>
+                <Link href="/bet">Rejoindre un pari</Link>
+              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>Créer un pari</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <NewBetForm />
+                </DialogContent>
+              </Dialog>
+
+              <Button asChild variant="secondary">
+                <Link href="/profile">
+                  <User className="mr-2" />
+                  {auth.user.username}
+                </Link>
+              </Button>
+            </>
           ) : (
             <Button asChild variant="outline">
               <Link href="/login">Connexion</Link>
