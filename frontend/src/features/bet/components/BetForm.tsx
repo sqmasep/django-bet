@@ -11,45 +11,53 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import useBetForm from "../hooks/useBetForm";
+import type { BetDetailsSchemaOutput } from "../validation/betDetailsSchema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 
-interface BetFormProps {}
+interface Option {
+  optionName: BetDetailsSchemaOutput["options"][number]["text"];
+  optionId: BetDetailsSchemaOutput["options"][number]["id"];
+}
 
-export default function BetForm(props: BetFormProps) {
-  const { form, onSubmit } = useBetForm();
+interface BetFormProps extends Pick<BetDetailsSchemaOutput, "id" | "name">, Option {
+  betId: number;
+}
+
+export default function BetForm({ name, id, optionName, optionId, betId }: BetFormProps) {
+  const { form, onSubmit, isPending, isError } = useBetForm(optionId, betId);
 
   return (
     <div>
       <Form {...form}>
+        <h2 className="border-b pb-2 text-xl font-bold">{name}</h2>
+
+        <h3 className="my-4 text-lg">Parier sur {optionName}</h3>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
           <FormField
             control={form.control}
             name="amount"
             render={({ field }) => (
               <FormItem className="grid gap-2">
-                <FormLabel>Montant</FormLabel>
+                <FormLabel>Montant (en €)</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input
+                    type="number"
+                    {...field}
+                    onChange={e => field.onChange(parseFloat(e.target.value))}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="option"
-            render={({ field }) => (
-              <FormItem className="grid gap-2">
-                <FormLabel>Option</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button type="submit" className="w-full">
+          <Button disabled={isPending} type="submit" className="w-full">
             Parier
           </Button>
         </form>
