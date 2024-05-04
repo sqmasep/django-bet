@@ -23,12 +23,13 @@ export default function NewBetForm() {
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+        <h2 className="border-b pb-2 text-xl font-bold">Créer un pari</h2>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 grid gap-4">
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem className="grid gap-2">
+              <FormItem>
                 <FormLabel>Nom du pari</FormLabel>
                 <FormControl>
                   <Input {...field} />
@@ -42,7 +43,7 @@ export default function NewBetForm() {
             control={form.control}
             name="maxDate"
             render={({ field }) => (
-              <FormItem className="grid gap-2">
+              <FormItem className="grid">
                 <FormLabel>Date et heure de fin</FormLabel>
                 <FormControl>
                   <DateTimePicker onChange={field.onChange} selected={field.value} />
