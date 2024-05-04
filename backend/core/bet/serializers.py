@@ -38,10 +38,12 @@ class UserBetSerializer(serializers.ModelSerializer):
         read_only_fields = ['user', 'date_placed']
 
     def create(self, validated_data):
-        # Get the option instance
-        option = validated_data.get('option')
-        # Update the total_amount and number_of_bets on the option
-        option.total_amount += validated_data.get('amount')
-        option.number_of_bets += 1
-        option.save()
-        return super().create(validated_data)
+        # Get the current user from the request context
+        user = self.context['request'].user
+        # Add the user to the validated_data
+        validated_data['user'] = user
+        # Create a new UserBet instance
+        user_bet = UserBet(**validated_data)
+        # Save the UserBet instance using the model's save method to handle validation and updating totals
+        user_bet.save()
+        return user_bet
