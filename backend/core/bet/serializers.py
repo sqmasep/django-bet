@@ -15,21 +15,6 @@ class OptionSerializer(serializers.ModelSerializer):
         return instance
 
 
-class BetSerializer(serializers.ModelSerializer):
-    options = OptionSerializer(many=True, required=False)
-
-    class Meta:
-        model = Bet
-        fields = ['id', 'name', 'author', 'users', 'signup_code', 'options']
-        read_only_fields = ['author', 'signup_code']
-
-    def create(self, validated_data):
-        options_data = validated_data.pop('options', [])
-        bet = Bet.objects.create(**validated_data)
-        for option_data in options_data:
-            Option.objects.create(bet=bet, **option_data)
-        return bet
-    
 
 class UserBetSerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,3 +32,21 @@ class UserBetSerializer(serializers.ModelSerializer):
         # Save the UserBet instance using the model's save method to handle validation and updating totals
         user_bet.save()
         return user_bet
+    
+
+class BetSerializer(serializers.ModelSerializer):
+    options = OptionSerializer(many=True, required=False)
+    user_bets = UserBetSerializer(many=True, required=False)
+
+    class Meta:
+        model = Bet
+        fields = ['id', 'name', 'author', 'users', 'signup_code', 'options', 'user_bets']
+        read_only_fields = ['author', 'signup_code']
+
+    def create(self, validated_data):
+        options_data = validated_data.pop('options', [])
+        bet = Bet.objects.create(**validated_data)
+        for option_data in options_data:
+            Option.objects.create(bet=bet, **option_data)
+        return bet
+    
