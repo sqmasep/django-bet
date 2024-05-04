@@ -1,6 +1,8 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from .models import CustomUser
+from bet.models import Bet
+from bet.serializers import UserBetSerializer
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     @classmethod
@@ -30,6 +32,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     """
     Currently unused in preference of the below.
     """
+    user_bets = UserBetSerializer(many=True, read_only=True)
     email = serializers.EmailField(
         required=True
     )
@@ -38,7 +41,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'email', 'username', 'password', 'balance')
+        fields = ('id', 'email', 'username', 'password', 'balance', 'user_bets')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):

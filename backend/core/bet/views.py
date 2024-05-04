@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from.serializers import BetSerializer, UserBetSerializer
-from.models import Bet, UserBet
+from.models import Bet, UserBet, Option
 from rest_framework import generics
 from rest_framework import permissions, status, views
 from rest_framework.response import Response
@@ -22,6 +22,7 @@ class UserBetsView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Bet.objects.filter(users=user)
+
 
 
 class CreateBetView(generics.CreateAPIView):
@@ -79,3 +80,30 @@ class GetBetView(views.APIView):
 
         serializer = BetSerializer(bet)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+
+class EndBetView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, signup_code):
+        try:
+            bet = Bet.objects.get(signup_code=signup_code)
+        except Bet.DoesNotExist:
+            return Response({'detail': 'Bet not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        if bet.author!= request.user:
+            return Response({'detail': 'You are not the owner of this bet.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        if bet.is_ended:
+            return Response({'detail': 'This bet has already ended.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        winning_option_id = request.data.get('winning_option_id')
+        try:
+            winning_option = Option.objects.get(id=winning_option_id)
+        except Option.DoesNotExist:
+            return Response({'detail': 'Winning option not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        bet.end_bet(winning_option)
+
+        return Response({'detail': 'Bet ended.'}, status=status.HTTP_200_OK)
