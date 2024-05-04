@@ -1,9 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as v from "valibot";
 import betDetailsSchema from "../validation/betDetailsSchema";
+import { useAuth } from "~/features/auth/contexts/AuthProvider";
 
-export default function useBetDetails(code: string, token: string) {
-  return useQuery({
+export default function useBetDetails(code: string) {
+  const { token } = useAuth();
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
     queryKey: ["bets", code],
     queryFn: async () =>
       fetch(`http://localhost:8000/api/bets/${code}/`, {
@@ -17,4 +21,12 @@ export default function useBetDetails(code: string, token: string) {
       }),
     enabled: !!code,
   });
+
+  async function invalidateBetDetails() {
+    return queryClient.invalidateQueries({
+      queryKey: ["bets", code],
+    });
+  }
+
+  return { ...query, invalidateBetDetails };
 }

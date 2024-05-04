@@ -2,9 +2,10 @@ import * as v from "valibot";
 import { emailSchema, usernameSchema } from "./common";
 
 const userSchema = v.object({
-  // id: v.number("L'identifiant de l'utilisateur n'est pas un nombre"),
+  id: v.number("L'identifiant de l'utilisateur n'est pas un nombre"),
   username: usernameSchema,
   email: emailSchema,
+  balance: v.string(),
 });
 
 export default userSchema;

@@ -49,6 +49,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       if (!response.ok) throw new Error(`${response.status} - ${response.statusText}`);
 
       const data = v.parse(userSchema, await response.json());
+      // const data = await response.json();
 
       return data;
     },

@@ -11,6 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export default function useAddToBalanceForm() {
   const { token } = useAuth();
+  const { invalidateUser } = useAuth();
 
   const form = useForm<AddToBalanceSchemaInput>({
     resolver: valibotResolver(addToBalanceSchema),
@@ -31,6 +32,7 @@ export default function useAddToBalanceForm() {
           Authorization: `JWT ${token}`,
         },
       }),
+    onSuccess: invalidateUser,
   });
 
   const onSubmit: SubmitHandler<AddToBalanceSchemaOutput> = data => {
