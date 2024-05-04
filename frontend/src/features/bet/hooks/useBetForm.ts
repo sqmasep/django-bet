@@ -5,9 +5,11 @@ import type { BetSchemaInput, BetSchemaOutput } from "../validation/betSchema";
 import betSchema from "../validation/betSchema";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "~/features/auth/contexts/AuthProvider";
+import useBetDetails from "./useBetDetails";
 
 export default function useBetForm(optionId: number, betId: number) {
   const { token } = useAuth();
+  const { invalidateBetDetails } = useBetDetails();
 
   const form = useForm<BetSchemaInput>({
     resolver: valibotResolver(betSchema),
@@ -18,7 +20,7 @@ export default function useBetForm(optionId: number, betId: number) {
     isPending,
     isError,
   } = useMutation({
-    mutationKey: ["bets", "vote", optionId],
+    mutationKey: ["bets", "vote", betId, optionId],
     mutationFn: async (data: BetSchemaOutput & { option: number; bet: number }) =>
       fetch("http://localhost:8000/api/bets/cast-userbet/", {
         method: "POST",
@@ -28,6 +30,8 @@ export default function useBetForm(optionId: number, betId: number) {
           Authorization: `JWT ${token}`,
         },
       }),
+
+    onSuccess: invalidateBetDetails,
   });
 
   const onSubmit: SubmitHandler<BetSchemaInput> = data => {

@@ -12,14 +12,6 @@ import {
 import { Input } from "~/components/ui/input";
 import useBetForm from "../hooks/useBetForm";
 import type { BetDetailsSchemaOutput } from "../validation/betDetailsSchema";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
-
 interface Option {
   optionName: BetDetailsSchemaOutput["options"][number]["text"];
   optionId: BetDetailsSchemaOutput["options"][number]["id"];

@@ -5,26 +5,42 @@ import { Button } from "~/components/ui/button";
 import { DialogContent, DialogTrigger } from "~/components/ui/dialog";
 import { useAuth } from "~/features/auth/contexts/AuthProvider";
 import BetForm from "~/features/bet/components/BetForm";
-import BetTable from "~/features/bet/components/BetTable";
+import EndBetForm from "~/features/bet/components/EndBetForm";
+// import BetTable from "~/features/bet/components/BetTable";
 import useBetDetails from "~/features/bet/hooks/useBetDetails";
 
 export default function BetDetails({ params }: { params: { code: string } }) {
-  const { token } = useAuth();
-  const { data, isLoading, isError } = useBetDetails(params.code, token);
+  const { data, isLoading, isError } = useBetDetails(params.code);
+  const { user } = useAuth();
 
-  if (isLoading) {
-    return <div>Chargement...</div>;
-  }
+  if (isLoading) return <div>Chargement...</div>;
+  if (isError) return <div>Erreur</div>;
 
-  if (isError) {
-    return <div>Erreur</div>;
-  }
+  const hasVoted = data?.users.includes(user?.id);
 
   return (
     <div className="container">
       <h1 className="my-8 text-2xl font-bold">{data?.name}</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+
+      {/* End bet */}
+      {data?.author === user?.id && (
+        <div>
+          <Dialog>
+            <DialogTrigger>
+              <Button variant="outline">Terminer le pari</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <EndBetForm signupCode={data?.signup_code} />
+            </DialogContent>
+          </Dialog>
+        </div>
+      )}
 
       <div className="flex flex-col">
+        {!!hasVoted && <div>Vous avez déjà voté</div>}
+
+        {/* Options list */}
         {data?.options.map(option => (
           <Dialog key={option.id.toString()}>
             <DialogTrigger asChild>
