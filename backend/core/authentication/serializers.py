@@ -9,9 +9,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
-        # Add custom claims
-        # ...
-
+  
         return token
 
     def validate(self, attrs):
@@ -23,6 +21,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             'id': self.user.id,
             'username': self.user.username,
             'email': self.user.email,
+            'balance': self.user.balance,
             # Include any other fields from the user model
         }})
         return data
