@@ -39,7 +39,7 @@ class AddToBalanceView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = CustomUserSerializer
     
-    def post(request):
+    def post(self, request):
         amount = request.data.get('amount', 0)
         user = request.user
         if amount <= 0:

@@ -8,7 +8,7 @@ class OptionInline(admin.TabularInline):  # You can also use admin.StackedInline
     extra = 1  # Number of empty forms to display
 
 class BetAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author')
+    list_display = ('id', 'signup_code', 'name', 'author')
     inlines = [OptionInline,]
     
 admin.site.register(Bet, BetAdmin)
