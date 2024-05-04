@@ -15,5 +15,6 @@ module.exports = {
     "no-duplicate-imports": "off",
     "new-cap": "off",
     camelcase: "off",
+    "quote-props": "off",
   },
 };

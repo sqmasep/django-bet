@@ -28,7 +28,7 @@ export default function Navbar() {
 
         <div>
           {auth.user ? (
-            auth.user.username
+            <Link href="/profile">{auth.user.username}</Link>
           ) : (
             <Button asChild variant="outline">
               <Link href="/login">Connexion</Link>
