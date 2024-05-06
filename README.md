@@ -28,4 +28,11 @@ py -m venv env
 .\env\Scripts\activate # Windows
 # OU
 source env/bin/activate # Linux
+
+
+# Installation des paquets requis
+pip install requirements.txt
+
+# Lancement du serveur
+python manage.py runserver
 ```
