@@ -7,9 +7,9 @@ import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "~/features/auth/contexts/AuthProvider";
 import useBetDetails from "./useBetDetails";
 
-export default function useBetForm(optionId: number, betId: number) {
-  const { token } = useAuth();
-  const { invalidateBetDetails } = useBetDetails();
+export default function useBetForm(optionId: number, betId: number, code: string) {
+  const { token, invalidateUser } = useAuth();
+  const { invalidateBetDetails } = useBetDetails(code);
 
   const form = useForm<BetSchemaInput>({
     resolver: valibotResolver(betSchema),
@@ -31,7 +31,10 @@ export default function useBetForm(optionId: number, betId: number) {
         },
       }),
 
-    onSuccess: invalidateBetDetails,
+    onSuccess: async () => {
+      invalidateBetDetails();
+      invalidateUser();
+    },
   });
 
   const onSubmit: SubmitHandler<BetSchemaInput> = data => {

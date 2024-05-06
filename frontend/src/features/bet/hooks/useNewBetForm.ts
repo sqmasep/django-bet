@@ -1,6 +1,6 @@
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import type { SubmitHandler } from "react-hook-form";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import type { NewBetSchemaInput } from "../validation/newBetSchema";
 import newBetSchema from "../validation/newBetSchema";
 import { useMutation } from "@tanstack/react-query";
@@ -35,17 +35,18 @@ export default function useNewBetForm() {
     defaultValues: {
       maxDate: undefined,
       name: "",
-      options: [
-        { _id: "1", value: "" },
-        { _id: "2", value: "" },
-      ],
+      options: [{ text: "" }, { text: "" }],
     },
+  });
+  const optionsField = useFieldArray({
+    control: form.control,
+    name: "options",
   });
 
   const onSubmit: SubmitHandler<NewBetSchemaInput> = data => {
     console.log("submit new bet form");
     const optionsValues = data.options
-      .map(option => ({ text: option.value.trim() }))
+      .map(option => ({ text: option.text.trim() }))
       .filter(el => Boolean(el.text));
 
     mutate({
@@ -54,5 +55,5 @@ export default function useNewBetForm() {
     });
   };
 
-  return { form, onSubmit };
+  return { form, optionsField, onSubmit };
 }

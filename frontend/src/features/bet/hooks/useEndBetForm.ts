@@ -5,9 +5,11 @@ import type { EndBetSchemaInput, EndBetSchemaOutput } from "../validation/endBet
 import endBetSchema from "../validation/endBetSchema";
 import { useAuth } from "~/features/auth/contexts/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
+import useBetDetails from "./useBetDetails";
 
-export default function useEndBetForm(signupCode: string) {
+export default function useEndBetForm(signupCode: string, code: string) {
   const { token } = useAuth();
+  const { invalidateBetDetails } = useBetDetails(code);
 
   const form = useForm<EndBetSchemaInput>({
     resolver: valibotResolver(endBetSchema),
@@ -28,6 +30,7 @@ export default function useEndBetForm(signupCode: string) {
           Authorization: `JWT ${token}`,
         },
       }),
+    onSuccess: invalidateBetDetails,
   });
 
   const onSubmit: SubmitHandler<EndBetSchemaOutput> = data => {

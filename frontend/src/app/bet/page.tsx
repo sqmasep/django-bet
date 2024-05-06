@@ -13,6 +13,7 @@ import NewBetForm from "~/features/bet/components/NewBetForm";
 import * as v from "valibot";
 import { useAuth } from "~/features/auth/contexts/AuthProvider";
 import { useRouter } from "next/navigation";
+import { useQueryState } from "nuqs";
 
 export default function Bet() {
   const { data, isLoading, isError } = useQuery({
@@ -36,6 +37,12 @@ export default function Bet() {
           1000,
         );
       }),
+  });
+
+  const [action, setAction] = useQueryState("action", {
+    defaultValue: "",
+    history: "replace",
+    clearOnDefault: true,
   });
 
   const { token } = useAuth();
@@ -74,7 +81,10 @@ export default function Bet() {
 
   return (
     <section className="container mt-12">
-      <Dialog>
+      <Dialog
+        open={action === "create"}
+        onOpenChange={async open => setAction(open ? "create" : "")}
+      >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-center gap-4">
             <FormField
@@ -93,7 +103,9 @@ export default function Bet() {
         </Form>
 
         <DialogTrigger asChild>
-          <Button className="my-12">Créer un nouveau pari</Button>
+          <Button className="my-12" onClick={async () => setAction("create")}>
+            Créer un nouveau pari
+          </Button>
         </DialogTrigger>
 
         <DialogContent>
