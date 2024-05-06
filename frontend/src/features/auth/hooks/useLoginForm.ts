@@ -35,7 +35,8 @@ export default function useLoginForm() {
           user: userSchema,
         });
 
-        const json = v.parse(schema, await response.json());
+        // const json = v.parse(schema, await response.json());
+        const json = await response.json();
 
         return json;
       })

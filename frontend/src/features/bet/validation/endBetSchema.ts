@@ -1,7 +1,7 @@
 import * as v from "valibot";
 
 const endBetSchema = v.object({
-  winning_option_id: v.number(),
+  winning_option_id: v.number("Veuillez renseignez une option valide"),
 });
 
 export default endBetSchema;

@@ -12,6 +12,7 @@ import {
 import { Input } from "~/components/ui/input";
 import useBetForm from "../hooks/useBetForm";
 import type { BetDetailsSchemaOutput } from "../validation/betDetailsSchema";
+import { useAuth } from "~/features/auth/contexts/AuthProvider";
 interface Option {
   optionName: BetDetailsSchemaOutput["options"][number]["text"];
   optionId: BetDetailsSchemaOutput["options"][number]["id"];
@@ -19,10 +20,12 @@ interface Option {
 
 interface BetFormProps extends Pick<BetDetailsSchemaOutput, "id" | "name">, Option {
   betId: number;
+  code: string;
 }
 
-export default function BetForm({ name, id, optionName, optionId, betId }: BetFormProps) {
-  const { form, onSubmit, isPending, isError } = useBetForm(optionId, betId);
+export default function BetForm({ name, optionName, optionId, betId }: BetFormProps) {
+  const { form, onSubmit, isPending, isError } = useBetForm(optionId, betId, code);
+  const { user } = useAuth();
 
   return (
     <div>
@@ -36,7 +39,11 @@ export default function BetForm({ name, id, optionName, optionId, betId }: BetFo
             name="amount"
             render={({ field }) => (
               <FormItem className="grid gap-2">
-                <FormLabel>Montant (en €)</FormLabel>
+                <FormLabel className="inline-flex flex-wrap items-center justify-between">
+                  <span>Montant (en €)</span>
+
+                  <span className="text-xs">Balance: {user?.balance}</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="number"

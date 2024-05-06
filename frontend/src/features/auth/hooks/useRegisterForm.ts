@@ -6,8 +6,10 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useAuth } from "../contexts/AuthProvider";
 import * as v from "valibot";
 import userSchema from "../validation/userSchema";
+import { useRouter } from "next/navigation";
 
 export default function useRegisterForm() {
+  const router = useRouter();
   const auth = useAuth();
 
   const form = useForm<RegisterSchemaInput>({
@@ -36,6 +38,7 @@ export default function useRegisterForm() {
       })
       .then(data => {
         auth.setToken(data.access);
+        router.push("/bet");
       })
       .catch(error => {
         console.error(error);

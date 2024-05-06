@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Flag, Trophy } from "lucide-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
@@ -38,9 +38,10 @@ export default function Profile() {
             </DialogContent>
           </Dialog>
         </div>
+        {/* <pre>{JSON.stringify(bets, null, 2)}</pre> */}
 
         {bets?.length > 0 && (
-          <div className="flex flex-col gap-1 rounded-xl border border-border bg-zinc-100 p-8">
+          <div className="col-span-2 flex flex-col gap-1 rounded-xl border border-border bg-zinc-100 p-8">
             <div className="mb-4 flex flex-wrap items-center justify-between">
               <h2 className="mb-2 text-lg font-bold">Paris récents</h2>
               <Dialog>
@@ -57,11 +58,15 @@ export default function Profile() {
 
             {bets?.map(bet => (
               <Link
-                className="group inline-flex items-center justify-between gap-4 rounded-lg bg-zinc-50 p-4  text-zinc-600"
+                data-ended={bet.is_ended}
+                className="group inline-flex items-center justify-between gap-4 rounded-lg bg-zinc-50 p-4 text-zinc-600  data-[ended=true]:bg-amber-50"
                 key={bet.signup_code}
                 href={`/bet/${bet.signup_code}`}
               >
-                <p className="font-semibold">{bet.name}</p>
+                <span className="inline-flex items-center gap-2">
+                  {!!bet.is_ended && <Trophy size={16} className="text-amber-500" />}
+                  <span className="font-semibold">{bet.name}</span>
+                </span>
                 <ArrowRight className="opacity-0 transition-opacity group-hover:opacity-100" />
               </Link>
             ))}
