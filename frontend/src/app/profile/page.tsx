@@ -1,7 +1,8 @@
 "use client";
 
-import { ArrowRight, Flag, Trophy } from "lucide-react";
+import { ArrowRight, Trophy } from "lucide-react";
 import Link from "next/link";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
 import { useAuth } from "~/features/auth/contexts/AuthProvider";
@@ -21,7 +22,7 @@ export default function Profile() {
         </h1>
       </div>
 
-      <div className="mt-8 grid grid-cols-3 gap-4">
+      <div className="mt-8 grid gap-4 md:grid-cols-3">
         <div className="rounded-xl border border-border bg-zinc-100 p-8">
           <div className="">
             <p className="text-lg text-zinc-600">Balance</p>
@@ -41,7 +42,7 @@ export default function Profile() {
         {/* <pre>{JSON.stringify(bets, null, 2)}</pre> */}
 
         {bets?.length > 0 && (
-          <div className="col-span-2 flex flex-col gap-1 rounded-xl border border-border bg-zinc-100 p-8">
+          <div className="flex flex-col gap-1 rounded-xl border border-border bg-zinc-100 p-8 md:col-span-2">
             <div className="mb-4 flex flex-wrap items-center justify-between">
               <h2 className="mb-2 text-lg font-bold">Paris récents</h2>
               <Dialog>
@@ -64,8 +65,9 @@ export default function Profile() {
                 href={`/bet/${bet.signup_code}`}
               >
                 <span className="inline-flex items-center gap-2">
-                  {!!bet.is_ended && <Trophy size={16} className="text-amber-500" />}
+                  {/* {!!bet.is_ended && <Trophy size={16} className="text-amber-500" />} */}
                   <span className="font-semibold">{bet.name}</span>
+                  {!!bet.is_ended && <Badge variant="outline">Terminé</Badge>}
                 </span>
                 <ArrowRight className="opacity-0 transition-opacity group-hover:opacity-100" />
               </Link>

@@ -3,6 +3,7 @@
 import { Dialog } from "@radix-ui/react-dialog";
 import { Check, Copy, Grid, List } from "lucide-react";
 import { useState } from "react";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { DialogContent, DialogTrigger } from "~/components/ui/dialog";
 import { useAuth } from "~/features/auth/contexts/AuthProvider";
@@ -33,6 +34,8 @@ export default function BetDetails({ params }: { params: { code: string } }) {
         <span>{data?.is_ended ? "Le pari est terminé" : "En cours"}</span>
       </div>
 
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+
       <Button
         variant="outline"
         onClick={async () => copy(params.code)}
@@ -48,9 +51,9 @@ export default function BetDetails({ params }: { params: { code: string } }) {
       </Button>
 
       <div className="mt-8 flex flex-col">
-        <div className="grid grid-cols-4 gap-8">
+        <div className="grid gap-8 md:grid-cols-4">
           {/* Options card */}
-          <div className="col-span-3 flex w-full flex-col rounded-xl border border-border bg-zinc-50 p-4">
+          <div className="flex w-full flex-col rounded-xl border border-border bg-zinc-50 p-4 md:col-span-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span>{hasVoted ? "Vous avez déjà voté" : "Vous n'avez pas encore voté"}</span>
 
@@ -60,7 +63,9 @@ export default function BetDetails({ params }: { params: { code: string } }) {
                   <div>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button variant="outline">Terminer le pari</Button>
+                        <Button variant="outline" disabled={data.is_ended}>
+                          Terminer le pari
+                        </Button>
                       </DialogTrigger>
                       <DialogContent>
                         <EndBetForm
@@ -113,10 +118,13 @@ export default function BetDetails({ params }: { params: { code: string } }) {
                   className="group flex items-center justify-between rounded-xl border border-border px-4 py-2 hover:bg-background data-[voted=true]:bg-green-200/20"
                   key={option.id}
                 >
-                  <span className="inline-flex items-center gap-1 font-semibold">
+                  <span className="inline-flex items-center gap-6 font-semibold">
                     {option.text}
                     {!!hasVoted && vote.option === option.id && (
-                      <Check className="text-emerald-800" />
+                      <Badge variant="outline" className="">
+                        Votre vote
+                      </Badge>
+                      // <Check className="text-emerald-800" />
                     )}
                   </span>
 

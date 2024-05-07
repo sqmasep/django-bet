@@ -76,8 +76,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         logout,
       }}
     >
-      {!!isError && <pre>{JSON.stringify(error, null, 2)}</pre>}
-
       {children}
     </AuthContext.Provider>
   );
