@@ -42,7 +42,7 @@ class BetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bet
-        fields = ['is_ended','id', 'name', 'author', 'users', 'signup_code', 'options', 'user_bets']
+        fields = ['is_ended','id', 'name', 'author', 'users', 'signup_code', 'options', 'winning_option', 'user_bets']
         read_only_fields = ['author', 'signup_code']
 
     def create(self, validated_data):
