@@ -1,7 +1,8 @@
 "use client";
 
-import { ArrowRight, Trophy } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Requirement from "~/components/Requirement";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
@@ -11,14 +12,27 @@ import AddToBalanceForm from "~/features/profile/components/AddToBalanceForm";
 import useUserBets from "~/features/profile/hooks/useUserBets";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { data: bets } = useUserBets();
+
+  if (!user)
+    return (
+      <Requirement className="mt-16">
+        <span className="text-xl font-bold">
+          Vous devez être connecté pour accéder à cette page
+        </span>
+      </Requirement>
+    );
 
   return (
     <section className="container">
-      <div className="mt-8 rounded-xl border border-border bg-zinc-100 p-16">
+      <Button className="ml-auto mt-2 block" variant="outline" onClick={logout}>
+        Se déconnecter
+      </Button>
+
+      <div className="mt-6 rounded-xl border border-border bg-zinc-100 p-16">
         <h1 className="text-5xl">
-          Bienvenue, <span className="font-bold">{user?.username}</span>!
+          Bienvenue, <span className="font-bold">{user.username}</span>!
         </h1>
       </div>
 
@@ -26,7 +40,7 @@ export default function Profile() {
         <div className="rounded-xl border border-border bg-zinc-100 p-8">
           <div className="">
             <p className="text-lg text-zinc-600">Balance</p>
-            <p className="text-4xl font-black">{user?.balance}€</p>
+            <p className="text-4xl font-black">{user.balance}€</p>
           </div>
           <Dialog>
             <DialogTrigger asChild>
