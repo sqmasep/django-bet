@@ -71,17 +71,17 @@ class UserBet(models.Model):
         return f"{self.user.username} placed {self.amount} on {self.option.text}"
 
     def save(self, *args, **kwargs):
-        # Start a transaction
-        with transaction.atomic():
-            # Check if the user has sufficient balance
+        
+        with transaction.atomic(): # Utilisé à cause d'un bug qui permettait aux users de faire des bets imaginaires, sans perdre d'argent, mais finalement pas **nécessaire** mais bon toujours utile jsp 
+            
             if self.user.balance < self.amount:
-                # If not, raise a ValidationError, which should roll back the transaction
+                
                 raise ValidationError("Insufficient balance to place this bet.")
             else:
-                # Deduct the bet amount from the user's balance
+                
                 self.user.balance -= self.amount
                 self.user.save()
-                # Save the UserBet instance
+                
                 super(UserBet, self).save(*args, **kwargs)
-                # Schedule the update_totals to be called after the transaction is committed
+                
                 transaction.on_commit(lambda: self.option.update_totals())
