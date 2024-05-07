@@ -27,7 +27,8 @@ const betDetailsSchema = v.object({
       date_placed: v.string(),
     }),
   ),
-  winning_option_id: v.number(),
+  // winning_option: v.optional(v.number()),
+  winning_option: v.any(),
 });
 
 export default betDetailsSchema;

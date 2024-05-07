@@ -1,15 +1,16 @@
 "use client";
 
 import { Dialog } from "@radix-ui/react-dialog";
-import { Check, Copy, Grid, List } from "lucide-react";
+import { Check, Copy, Grid, List, Trophy } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
+import Requirement from "~/components/Requirement";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { DialogContent, DialogTrigger } from "~/components/ui/dialog";
 import { useAuth } from "~/features/auth/contexts/AuthProvider";
 import BetForm from "~/features/bet/components/BetForm";
 import EndBetForm from "~/features/bet/components/EndBetForm";
-// import BetTable from "~/features/bet/components/BetTable";
 import useBetDetails from "~/features/bet/hooks/useBetDetails";
 import useCopy from "~/hooks/useCopy";
 import { cn } from "~/lib/utils";
@@ -24,17 +25,25 @@ export default function BetDetails({ params }: { params: { code: string } }) {
   if (isLoading) return <div>Chargement...</div>;
   if (isError) return <div>Erreur</div>;
 
-  const vote = data?.user_bets.find(bet => bet.user === user?.id);
+  if (!data?.users.includes(user?.id))
+    return (
+      <Requirement>
+        Vous devez être inscrits à ce pari pour participer
+        <Button asChild className="mt-4">
+          <Link href="/bet">Participer</Link>
+        </Button>
+      </Requirement>
+    );
+
+  const vote = data.user_bets.find(bet => bet.user === user?.id);
   const hasVoted = !!vote;
 
   return (
     <div className="container">
       <div className="mt-8">
-        <h1 className="text-2xl font-bold">{data?.name}</h1>
-        <span>{data?.is_ended ? "Le pari est terminé" : "En cours"}</span>
+        <h1 className="text-2xl font-bold">{data.name}</h1>
+        <span>{data.is_ended ? "Le pari est terminé" : "En cours"}</span>
       </div>
-
-      <pre>{JSON.stringify(data, null, 2)}</pre>
 
       <Button
         variant="outline"
@@ -111,15 +120,19 @@ export default function BetDetails({ params }: { params: { code: string } }) {
                 view === "list" && "flex flex-col",
               )}
             >
-              {data?.options.map(option => (
+              {data.options.map(option => (
                 <div
+                  data-winning-option={data.winning_option === option.id}
                   data-disabled={hasVoted}
                   data-voted={!!hasVoted && vote.option === option.id}
-                  className="group flex items-center justify-between rounded-xl border border-border px-4 py-2 hover:bg-background data-[voted=true]:bg-green-200/20"
+                  className="group flex items-center justify-between rounded-xl border border-border px-4 py-2 hover:bg-background data-[voted=true]:bg-green-200/20 data-[winning-option=true]:bg-amber-100"
                   key={option.id}
                 >
                   <span className="inline-flex items-center gap-6 font-semibold">
                     {option.text}
+                    {data.winning_option === option.id && (
+                      <Trophy size={16} className="text-amber-500" />
+                    )}
                     {!!hasVoted && vote.option === option.id && (
                       <Badge variant="outline" className="">
                         Votre vote
@@ -166,14 +179,21 @@ export default function BetDetails({ params }: { params: { code: string } }) {
             {/* list of users sorted by amount */}
             <div className="flex flex-col gap-2">
               <h2 className="text-lg font-semibold">Classement</h2>
-              {data?.user_bets
+              {data.user_bets.length === 0 && <div className="">Personne n'a encore participé</div>}
+              {data.user_bets
                 .sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount))
                 .map(bet => (
                   <div
-                    className="flex items-center justify-between rounded-xl border border-border px-4 py-2"
+                    data-has-won={bet.option === data.winning_option}
+                    className="flex items-center justify-between rounded-xl border border-border px-4 py-2 data-[has-won=true]:bg-amber-100"
                     key={bet.user}
                   >
-                    <span>{bet.user_username}</span>
+                    <span className="inline-flex items-center gap-4">
+                      {bet.option === data.winning_option && (
+                        <Trophy size={20} className="text-amber-500" />
+                      )}
+                      {bet.user_username}
+                    </span>
                     <span>{bet.amount}€</span>
                   </div>
                 ))}
@@ -181,8 +201,6 @@ export default function BetDetails({ params }: { params: { code: string } }) {
           </div>
         </div>
       </div>
-
-      {/* <BetTable array={[{ name: "jar", odds: "" }]} /> */}
     </div>
   );
 }

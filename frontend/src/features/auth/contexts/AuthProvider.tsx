@@ -33,9 +33,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   const {
     data: user,
-    isLoading,
-    isError,
-    error,
+    // isLoading,
+    // isError,
+    // error,
   } = useQuery({
     queryKey: ["user", "me"],
     enabled: token !== null,
