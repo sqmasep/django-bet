@@ -31,7 +31,7 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           {auth.user ? (
             <>
-              <Button variant="ghost" asChild>
+              <Button variant="ghost" className="max-md:hidden" asChild>
                 <Link href="/bet">Rejoindre un pari</Link>
               </Button>
               <Dialog>

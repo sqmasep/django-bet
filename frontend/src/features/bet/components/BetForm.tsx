@@ -23,7 +23,7 @@ interface BetFormProps extends Pick<BetDetailsSchemaOutput, "id" | "name">, Opti
   code: string;
 }
 
-export default function BetForm({ name, optionName, optionId, betId }: BetFormProps) {
+export default function BetForm({ name, optionName, optionId, betId, code }: BetFormProps) {
   const { form, onSubmit, isPending, isError } = useBetForm(optionId, betId, code);
   const { user } = useAuth();
 

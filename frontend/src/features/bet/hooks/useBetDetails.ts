@@ -17,6 +17,7 @@ export default function useBetDetails(code: string) {
         },
       }).then(async res => {
         const betDetails = await res.json();
+        return betDetails;
         return v.parse(betDetailsSchema, betDetails);
       }),
     enabled: !!code,
